@@ -1,0 +1,191 @@
+Here’s the English version of your API testing guide for Postman:
+
+---
+
+✅ **Now that the app is running, here are all the commands you need to test the API using Postman.**  
+**📌 Make sure `app.py` is running before starting the tests!**  
+```bash
+python app.py
+```
+
+---
+
+## **1️⃣ Register a New User (`/register`)**
+### **🔹 Steps in Postman:**
+- **Method:** `POST`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/register
+  ```
+- **Headers:**
+  ```
+  Content-Type: application/json
+  ```
+- **Body (JSON):**
+  ```json
+  {
+      "username": "testuser",
+      "password": "testpass"
+  }
+  ```
+- **📌 Expected Response:**  
+  ```json
+  {
+      "message": "User registered successfully!",
+      "2fa_secret": "JBSWY3DPEHPK3PXP"
+  }
+  ```
+  🚨 **Save the `2fa_secret`—you’ll need it for Google Authenticator.**
+
+---
+
+## **2️⃣ Get QR Code for 2FA (`/qr_code/<username>`)**
+### **🔹 Steps in Postman:**
+- **Method:** `GET`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/qr_code/testuser
+  ```
+- **📌 Expected Response:**  
+  A QR Code image **(scan it using Google Authenticator).**
+
+---
+
+## **3️⃣ Login with 2FA (`/login`)**
+### **🔹 Steps in Postman:**
+- **Method:** `POST`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/login
+  ```
+- **Headers:**
+  ```
+  Content-Type: application/json
+  ```
+- **Body (JSON):**
+  ```json
+  {
+      "username": "testuser",
+      "password": "testpass",
+      "2fa_code": "123456"
+  }
+  ```
+  🚨 **Replace `123456` with the actual code from Google Authenticator.**
+
+- **📌 Expected Response:**  
+  ```json
+  {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+  ```
+  🔹 **Save the `token`—you’ll need it for subsequent requests.**
+
+---
+
+## **4️⃣ Add a New Product (`/products`)**
+### **🔹 Steps in Postman:**
+- **Method:** `POST`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/products
+  ```
+- **Headers:**
+  ```
+  Content-Type: application/json
+  Authorization: Bearer YOUR_JWT_TOKEN
+  ```
+  🚨 **Replace `YOUR_JWT_TOKEN` with the token from `/login`.**
+
+- **Body (JSON):**
+  ```json
+  {
+      "name": "Laptop",
+      "description": "Gaming laptop",
+      "price": 1500.00,
+      "quantity": 5
+  }
+  ```
+- **📌 Expected Response:**  
+  ```json
+  {
+      "message": "Product added successfully"
+  }
+  ```
+
+---
+
+## **5️⃣ List All Products (`/products`)**
+### **🔹 Steps in Postman:**
+- **Method:** `GET`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/products
+  ```
+- **Headers:**
+  ```
+  Authorization: Bearer YOUR_JWT_TOKEN
+  ```
+- **📌 Expected Response:**  
+  ```json
+  [
+      {
+          "id": 1,
+          "name": "Laptop",
+          "description": "Gaming laptop",
+          "price": 1500.00,
+          "quantity": 5
+      }
+  ]
+  ```
+
+---
+
+## **6️⃣ Update a Product (`/products/<id>`)**
+### **🔹 Steps in Postman:**
+- **Method:** `PUT`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/products/1
+  ```
+- **Headers:**
+  ```
+  Content-Type: application/json
+  Authorization: Bearer YOUR_JWT_TOKEN
+  ```
+- **Body (JSON):**
+  ```json
+  {
+      "price": 1200.00,
+      "quantity": 10
+  }
+  ```
+- **📌 Expected Response:**  
+  ```json
+  {
+      "message": "Product updated successfully"
+  }
+  ```
+
+---
+
+## **7️⃣ Delete a Product (`/products/<id>`)**
+### **🔹 Steps in Postman:**
+- **Method:** `DELETE`
+- **URL:**  
+  ```
+  http://127.0.0.1:5000/products/1
+  ```
+- **Headers:**
+  ```
+  Authorization: Bearer YOUR_JWT_TOKEN
+  ```
+- **📌 Expected Response:**  
+  ```json
+  {
+      "message": "Product deleted successfully"
+  }
+  ```
+
+---
+
+Let me know if you'd like any modifications! 🚀
